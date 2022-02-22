@@ -87,7 +87,7 @@ while(True):
         predaction = pred_fight(model,ysdatav2,acuracy=0.96)
         if predaction[0] == True:
             print('violence detected')
-            thread = Thread(target = on_detect, args = (image))
+            thread = Thread(target = on_detect, args = [image])
             thread.start()
             # cv2.imshow('video', frame)
             # print('Violence detected')
