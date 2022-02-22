@@ -75,12 +75,14 @@ j = 0
 # print('Violence detected\n'*2)
 while(True):
     ret, frame = cap.read()
+    image = frame
     if i > 29:
         ysdatav2 = np.zeros((1, 30, 160, 160, 3), dtype=np.float)
         ysdatav2[0][:][:] = frames
         predaction = pred_fight(model,ysdatav2,acuracy=0.96)
         if predaction[0] == True:
             print('violence detected')
+            cv2.imwrite("./detection.jpg", image) 
             action.send_notification()
             # cv2.imshow('video', frame)
             # print('Violence detected')
