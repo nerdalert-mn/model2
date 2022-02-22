@@ -9,6 +9,7 @@ import cv2
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from threading import Thread
 import action
 
 import os
@@ -20,7 +21,11 @@ def pred_fight(model,video,acuracy=0.9):
     else:
         return False , pred_test[0][1]
 
-def mamon_videoFightModel2(tf,wight='./mamonbest947oscombo.hdfs'):
+def on_detect(frame):
+    cv2.imwrite("./detection.jpg", frame) 
+    action.send_notification()
+
+def mamon_videoFightModel2(tf,wight='mamonbest947oscombo.hdfs'):
     layers = tf.keras.layers
     models = tf.keras.models
     losses = tf.keras.losses
@@ -82,8 +87,8 @@ while(True):
         predaction = pred_fight(model,ysdatav2,acuracy=0.96)
         if predaction[0] == True:
             print('violence detected')
-            cv2.imwrite("./detection.jpg", image) 
-            action.send_notification()
+            thread = Thread(target = on_detect, args = (image))
+            thread.start()
             # cv2.imshow('video', frame)
             # print('Violence detected')
             # fourcc = cv2.VideoWriter_fourcc(*'XVID')
